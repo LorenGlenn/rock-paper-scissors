@@ -5,53 +5,65 @@ namespace RoShamBo.Objects
 {
   public class Game
   {
+    // Choices and random for AI player
+    private List<string> _computerChoices = new List<string> { "rock", "paper", "scissors" };
+    private Random _rng = new Random();
     private string _p1Choice;
     private string _p2Choice;
     private List<string> _choices = new List<string> { };
+    private Dictionary<string, string> _results = new Dictionary<string, string> {};
 
-    public Game(string p1Choice, string p2Choice)
+    public Game(string p1Choice)
     {
-      _p2Choice = p2Choice;
       _p1Choice = p1Choice;
+      _p2Choice = _computerChoices[_rng.Next(0, 3)];
       _choices.Add(_p1Choice);
       _choices.Add(_p2Choice);
     }
 
-    public int CheckWin()
+    public Dictionary<string, string> CheckWin()
     {
       if (_choices.Contains("rock") && _choices.Contains("paper"))
       {
-        int result = _choices.IndexOf("paper");
-        return result;
+        _results.Add("choice","paper");
+        _results.Add("index", _choices.IndexOf("paper").ToString());
+        return _results;
       }
       else if (_choices.Contains("rock") && _choices.Contains("scissors"))
       {
-        int result = _choices.IndexOf("rock");
-        return result;
+        _results.Add("choice", "rock");
+        _results.Add("index", _choices.IndexOf("rock").ToString());
+        return _results;
       }
       else if (_choices.Contains("scissors") && _choices.Contains("paper"))
       {
-        int result = _choices.IndexOf("scissors");
-        return result;
+        _results.Add("choice", "scissors");
+        _results.Add("index", _choices.IndexOf("scissors").ToString());
+        return _results;
       }
       else if (_choices[0] == _choices[1])
       {
-        return 3;
+        _results.Add("index", "3");
+        _results.Add("choice", "Draw");
+        return _results;
       }
       else
       {
-        return 4;
+        _results.Add("index", "4");
+        _results.Add("choice", "Error");
+        return _results;
       }
     }
 
-    public string OutputString(int result)
+    public string OutputString(string winningIndex, string winningChoice)
     {
-      if (result <= 1)
+      int winner = int.Parse(winningIndex);
+      if (winner <= 1)
       {
-      result+=1;
-      return "Player "+result+" wins!";
+        int winningPlayer = winner + 1;
+        return "Player "+winningPlayer+" chose "+winningChoice+" and wins!";
       }
-      else if (result == 3)
+      else if (winner == 3)
       {
         return "Draw!";
       }
